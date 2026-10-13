@@ -1,0 +1,751 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="data:," />
+    <meta name="description" content="何钊新 · AI 产品经理 / 数据分析（2027 届）作品集：Text2SQL 数据分析 Agent、RAG 面试练习助手与已上线的 AI 求职助手。" />
+    <title>何钊新 · AI 产品经理 / 数据分析（2027 届）作品集</title>
+    <style>
+      :root {
+        --teal: #0f766e;
+        --teal-strong: #0b5a54;
+        --teal-soft: rgba(15, 118, 110, 0.09);
+        --bg: #f7f8f7;
+        --surface: #ffffff;
+        --surface-2: #eef2f1;
+        --ink: #16211f;
+        --ink-2: #43534f;
+        --ink-3: #75837f;
+        --line: #dde4e2;
+        --chip-bg: #eef2f1;
+        --hero-bg: #0d2b28;
+        --hero-ink: #eef6f4;
+        --hero-ink-2: #a8c4bf;
+        --nav-cta-bg: #0f766e;
+        --nav-cta-ink: #ffffff;
+        color-scheme: light;
+      }
+      [data-theme="dark"] {
+        --teal: #2dd4bf;
+        --teal-strong: #5eead4;
+        --teal-soft: rgba(45, 212, 191, 0.1);
+        --bg: #0e1514;
+        --surface: #16201e;
+        --surface-2: #1b2826;
+        --ink: #e8f0ee;
+        --ink-2: #a9bab5;
+        --ink-3: #7d8f8a;
+        --line: #26332f;
+        --chip-bg: #1b2826;
+        --hero-bg: #0a2421;
+        --hero-ink: #eef6f4;
+        --hero-ink-2: #a8c4bf;
+        --nav-cta-bg: #2dd4bf;
+        --nav-cta-ink: #092a26;
+        color-scheme: dark;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme="light"]) {
+          --teal: #2dd4bf;
+          --teal-strong: #5eead4;
+          --teal-soft: rgba(45, 212, 191, 0.1);
+          --bg: #0e1514;
+          --surface: #16201e;
+          --surface-2: #1b2826;
+          --ink: #e8f0ee;
+          --ink-2: #a9bab5;
+          --ink-3: #7d8f8a;
+          --line: #26332f;
+          --chip-bg: #1b2826;
+          --hero-bg: #0a2421;
+          --nav-cta-bg: #2dd4bf;
+          --nav-cta-ink: #092a26;
+          color-scheme: dark;
+        }
+      }
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", "Source Han Sans SC", sans-serif;
+        font-size: 16px;
+        line-height: 1.7;
+        -webkit-font-smoothing: antialiased;
+      }
+      .wrap { max-width: 1060px; margin: 0 auto; padding: 0 24px; }
+
+      /* ---------- top bar ---------- */
+      .topbar {
+        position: sticky; top: 0; z-index: 20;
+        background: color-mix(in srgb, var(--bg) 88%, transparent);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid var(--line);
+      }
+      .topbar-in {
+        display: flex; align-items: center; justify-content: space-between;
+        height: 56px;
+      }
+      .brand {
+        display: inline-flex; align-items: center; padding: 4px 0;
+        font-family: "Songti SC", "STSong", "Noto Serif SC", "SimSun", serif;
+        font-size: 21px; line-height: 1; color: var(--teal-strong);
+        text-decoration: none;
+      }
+      .brand-name {
+        display: inline-flex; align-items: center; gap: 0.08em;
+        font-weight: 800; letter-spacing: 0.1em;
+      }
+      .brand-name::before,
+      .brand-name::after {
+        content: ""; width: 6px; height: 13px; flex: none;
+        opacity: 0.72; transition: opacity 0.15s ease, transform 0.15s ease;
+      }
+      .brand-name::before {
+        border-top: 1px solid currentColor; border-left: 1px solid currentColor;
+        transform: translateY(-2px);
+      }
+      .brand-name::after {
+        border-right: 1px solid currentColor; border-bottom: 1px solid currentColor;
+        transform: translate(-0.06em, 2px);
+      }
+      .brand-surname,
+      .brand-given { color: inherit; font-weight: inherit; letter-spacing: inherit; }
+      .brand:hover { color: var(--teal); }
+      .brand:hover .brand-name::before { opacity: 1; transform: translate(-1px, -3px); }
+      .brand:hover .brand-name::after { opacity: 1; transform: translate(calc(-0.06em + 1px), 3px); }
+      .brand:focus-visible { outline: 2px solid var(--teal); outline-offset: 4px; border-radius: 2px; }
+      nav.main { display: flex; align-items: center; gap: 26px; }
+      nav.main a {
+        color: var(--ink-2); text-decoration: none; font-size: 14px; font-weight: 500;
+      }
+      nav.main a:hover { color: var(--teal); }
+      nav.main a.contact-cta {
+        display: inline-flex; align-items: center; justify-content: center;
+        min-height: 34px; padding: 6px 15px; border-radius: 6px;
+        background: var(--nav-cta-bg); color: var(--nav-cta-ink); font-weight: 700;
+        box-shadow: 0 5px 14px rgba(15, 118, 110, 0.18);
+      }
+      nav.main a.contact-cta:hover { background: var(--teal-strong); color: var(--nav-cta-ink); }
+      @media (max-width: 560px) {
+        nav.main { gap: 10px; }
+        nav.main a { display: none; }
+        nav.main a.keep { display: inline-flex; }
+        .brand { font-size: 19px; }
+      }
+      .theme-btn {
+        border: 1px solid var(--line); background: var(--surface); color: var(--ink-2);
+        width: 34px; height: 34px; border-radius: 50%; cursor: pointer;
+        display: inline-flex; align-items: center; justify-content: center;
+        font-size: 15px; line-height: 1; padding: 0;
+      }
+      .theme-btn:hover { border-color: var(--teal); color: var(--teal); }
+
+      /* ---------- hero ---------- */
+      .hero { background: var(--hero-bg); color: var(--hero-ink); }
+      .hero-in { padding: 84px 0 72px; }
+      .hero .role-line {
+        font-family: ui-monospace, "SF Mono", Menlo, Consolas, "Courier New", monospace; font-size: 13px; letter-spacing: 0.22em;
+        color: #5eead4; text-transform: uppercase; margin: 0 0 22px;
+      }
+      .hero h1 {
+        font-family: "Songti SC", "STSong", "Noto Serif SC", "SimSun", serif; font-weight: 900;
+        font-size: clamp(52px, 9vw, 84px); line-height: 1.08; margin: 0 0 18px;
+        letter-spacing: 0.02em;
+      }
+      .hero .tagline {
+        font-size: clamp(19px, 3vw, 25px); font-weight: 500; margin: 0 0 14px; color: var(--hero-ink);
+      }
+      .hero .sub {
+        color: var(--hero-ink-2); font-size: 15.5px; max-width: 620px; margin: 0 0 34px;
+      }
+      .hero-cta { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
+      .btn {
+        display: inline-flex; align-items: center; gap: 8px;
+        padding: 12px 26px; border-radius: 6px; font-size: 15px; font-weight: 600;
+        text-decoration: none; cursor: pointer; border: 1px solid transparent;
+        transition: transform 0.15s ease, background 0.15s ease;
+      }
+      .btn:active { transform: translateY(1px); }
+      .btn-primary { background: #0f766e; color: #fff; }
+      .btn-primary:hover { background: #0b5a54; }
+      .btn-ghost { border-color: rgba(238, 246, 244, 0.35); color: var(--hero-ink); background: transparent; }
+      .btn-ghost:hover { border-color: #5eead4; color: #5eead4; }
+      .hero-meta {
+        display: flex; flex-wrap: wrap; gap: 10px 28px; margin-top: 48px;
+        padding-top: 26px; border-top: 1px solid rgba(238, 246, 244, 0.16);
+        font-size: 14px; color: var(--hero-ink-2);
+      }
+      .hero-meta b { color: var(--hero-ink); font-weight: 600; }
+      /* ---------- sections ---------- */
+      section { padding: 72px 0 8px; }
+      .sec-head { display: flex; align-items: baseline; gap: 16px; margin-bottom: 34px; }
+      .sec-head h2 {
+        font-family: "Songti SC", "STSong", "Noto Serif SC", "SimSun", serif; font-size: 30px; font-weight: 700; margin: 0;
+      }
+      .sec-head .en {
+        font-family: ui-monospace, "SF Mono", Menlo, Consolas, "Courier New", monospace; font-size: 12px; letter-spacing: 0.2em;
+        color: var(--teal); text-transform: uppercase;
+      }
+      .sec-head .rule { flex: 1; height: 1px; background: var(--line); }
+
+      /* ---------- projects ---------- */
+      .proj-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+      @media (max-width: 760px) { .proj-grid { grid-template-columns: 1fr; } }
+      .proj {
+        background: var(--surface); border: 1px solid var(--line); border-radius: 10px;
+        padding: 28px 28px 24px; display: flex; flex-direction: column;
+      }
+      .proj.featured { grid-column: 1 / -1; }
+      .proj-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
+      .proj h3 { font-size: 20px; font-weight: 700; margin: 0 0 4px; line-height: 1.4; }
+      .proj .who {
+        font-family: ui-monospace, "SF Mono", Menlo, Consolas, "Courier New", monospace; font-size: 12px; color: var(--teal);
+        letter-spacing: 0.08em; white-space: nowrap; padding-top: 5px;
+      }
+      .proj .desc { color: var(--ink-2); font-size: 15px; margin: 8px 0 18px; }
+      .core-metrics {
+        margin: 14px 0 4px; padding: 10px 14px; border-radius: 6px;
+        background: var(--teal-soft); color: var(--teal-strong);
+        font-family: ui-monospace, "SF Mono", Menlo, Consolas, "Courier New", monospace;
+        font-size: 13px; font-weight: 600; line-height: 1.55;
+      }
+      .core-metrics a { color: inherit; text-underline-offset: 3px; }
+      .stats { display: flex; flex-wrap: wrap; gap: 28px; margin: 0 0 20px; }
+      .stat .num {
+        font-family: ui-monospace, "SF Mono", Menlo, Consolas, "Courier New", monospace; font-size: 30px; font-weight: 600;
+        color: var(--teal-strong); line-height: 1.1; display: block;
+      }
+      .stat .lbl { font-size: 13px; color: var(--ink-3); }
+      .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; }
+      .tag {
+        font-size: 12.5px; padding: 3px 11px; border-radius: 999px;
+        background: var(--chip-bg); color: var(--ink-2); font-weight: 500;
+      }
+      .proj-links { margin-top: 18px; display: flex; gap: 18px; flex-wrap: wrap; }
+      .proj-links a {
+        color: var(--teal); font-size: 14px; font-weight: 600; text-decoration: none;
+      }
+      .proj-links a:hover { text-decoration: underline; }
+      .live-dot {
+        display: inline-block; width: 7px; height: 7px; border-radius: 50%;
+        background: #22c55e; margin-right: 6px; vertical-align: 2px;
+      }
+      .project-shot {
+        margin: 18px 0 4px; border: 1px solid var(--line); border-radius: 8px;
+        overflow: hidden; background: var(--surface-2);
+      }
+      .project-shot img {
+        display: block; width: 100%; aspect-ratio: 1.95 / 1; object-fit: cover;
+        object-position: center top;
+      }
+      .project-shot figcaption {
+        padding: 8px 12px; color: var(--ink-3); font-size: 12.5px;
+        border-top: 1px solid var(--line);
+      }
+      .github-card {
+        margin-top: 20px; padding: 22px 24px;
+        background: var(--surface); border: 1px solid var(--line); border-radius: 10px;
+        display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 24px; align-items: start;
+      }
+      .github-card h3 { margin: 0 0 5px; font-size: 18px; line-height: 1.4; }
+      .github-card .github-profile {
+        color: var(--teal); font-size: 13.5px; font-weight: 600; text-decoration: none;
+      }
+      .github-card .github-profile:hover { text-decoration: underline; }
+      .repo-list { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 12px; }
+      .repo-link {
+        display: flex; align-items: center; justify-content: space-between; gap: 12px;
+        min-width: 0; padding: 10px 12px; border-radius: 7px;
+        background: var(--surface-2); color: var(--ink); text-decoration: none;
+      }
+      .repo-link:hover { background: var(--teal-soft); color: var(--teal-strong); }
+      .repo-name {
+        min-width: 0; overflow-wrap: anywhere;
+        font-family: ui-monospace, "SF Mono", Menlo, Consolas, "Courier New", monospace;
+        font-size: 12.5px; font-weight: 600;
+      }
+      .repo-license { flex: none; color: var(--ink-3); font-size: 11.5px; white-space: nowrap; }
+      @media (max-width: 760px) {
+        .github-card { grid-template-columns: 1fr; gap: 16px; padding: 20px; }
+        .repo-list { grid-template-columns: 1fr; }
+      }
+
+      /* ---------- skills ---------- */
+      .skill-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+      @media (max-width: 760px) { .skill-grid { grid-template-columns: 1fr; } }
+      .skill-col { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 24px 26px; }
+      .skill-col h3 {
+        margin: 0 0 16px; font-size: 16px; font-weight: 700;
+        display: flex; align-items: center; gap: 10px;
+      }
+      .skill-col h3::before {
+        content: ""; width: 8px; height: 8px; background: var(--teal); border-radius: 2px; flex: none;
+      }
+      .skill-col ul { list-style: none; margin: 0; padding: 0; }
+      .skill-col li {
+        padding: 7px 0; border-bottom: 1px dashed var(--line); font-size: 15px; color: var(--ink-2);
+      }
+      .skill-col li:last-child { border-bottom: none; }
+
+      /* ---------- timeline ---------- */
+      .timeline { position: relative; padding-left: 26px; }
+      .timeline::before {
+        content: ""; position: absolute; left: 5px; top: 8px; bottom: 8px;
+        width: 2px; background: var(--line);
+      }
+      .tl-item { position: relative; padding-bottom: 36px; }
+      .tl-item:last-child { padding-bottom: 8px; }
+      .tl-item::before {
+        content: ""; position: absolute; left: -26px; top: 8px;
+        width: 12px; height: 12px; border-radius: 50%;
+        background: var(--bg); border: 3px solid var(--teal);
+      }
+      .tl-when {
+        font-family: ui-monospace, "SF Mono", Menlo, Consolas, "Courier New", monospace; font-size: 13px; color: var(--teal);
+        letter-spacing: 0.05em;
+      }
+      .tl-item h3 { margin: 4px 0 6px; font-size: 18px; font-weight: 700; }
+      .tl-item p { margin: 0; color: var(--ink-2); font-size: 15px; max-width: 720px; }
+      .tl-bullets { margin: 6px 0 0; padding-left: 20px; color: var(--ink-2); font-size: 15px; max-width: 720px; }
+      .tl-bullets li { padding-left: 2px; }
+      .tl-bullets li::marker { color: var(--teal); }
+
+      /* ---------- hero extras ---------- */
+      .status-badge {
+        display: inline-flex; align-items: center; gap: 9px;
+        border: 1px solid rgba(94, 234, 212, 0.45); border-radius: 999px;
+        padding: 6px 16px 6px 12px; font-size: 13.5px; font-weight: 500;
+        color: var(--hero-ink); margin: 0 0 26px; background: rgba(94, 234, 212, 0.08);
+      }
+      .status-badge .dot {
+        width: 8px; height: 8px; border-radius: 50%; background: #22c55e; flex: none;
+        box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.25);
+      }
+      .btn-light { background: #eef6f4; color: #0d2b28; }
+      .btn-light:hover { background: #ffffff; }
+
+      /* ---------- project cases ---------- */
+      .case-block { border-top: 1px dashed var(--line); padding: 16px 0 4px; margin-top: 16px; }
+      .case-block:first-of-type { border-top: none; margin-top: 4px; }
+      .case-label {
+        font-family: ui-monospace, "SF Mono", Menlo, Consolas, "Courier New", monospace;
+        font-size: 11.5px; letter-spacing: 0.18em; color: var(--teal);
+        text-transform: uppercase; display: block; margin-bottom: 6px;
+      }
+      .case-block p { margin: 0 0 10px; color: var(--ink-2); font-size: 15px; }
+      .proj .stats { margin-top: 6px; }
+      .proj .outcome { background: var(--teal-soft); border-radius: 8px; padding: 16px 18px 6px; margin-top: 16px; }
+      .proj .outcome .case-label { margin-bottom: 10px; }
+      .proj .outcome .stats { margin-bottom: 10px; }
+
+      /* ---------- about ---------- */
+      .about-card {
+        background: var(--surface); border: 1px solid var(--line); border-radius: 10px;
+        padding: 30px 32px;
+      }
+      .about-card p { margin: 0 0 14px; color: var(--ink-2); font-size: 16px; max-width: 860px; }
+      .about-card p:last-child { margin-bottom: 0; }
+      .about-card b { color: var(--ink); }
+
+      /* ---------- contact CTA ---------- */
+      .cta-band { margin-top: 72px; background: var(--teal-soft); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+      .cta-in { padding: 56px 0; text-align: left; }
+      .cta-layout { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 42px; align-items: center; }
+      .wechat-card {
+        display: flex; align-items: center; gap: 16px; padding: 14px 18px 14px 14px;
+        background: var(--surface); border: 1px solid var(--line); border-radius: 10px;
+      }
+      .wechat-card img { width: 132px; height: 132px; object-fit: contain; display: block; }
+      .wechat-card strong { display: block; color: var(--ink); font-size: 15px; margin-bottom: 3px; }
+      .wechat-card span { display: block; color: var(--ink-2); font-size: 13.5px; }
+      @media (max-width: 760px) {
+        .cta-layout { grid-template-columns: 1fr; gap: 28px; }
+        .wechat-card { width: fit-content; max-width: 100%; }
+        .wechat-card img { width: 120px; height: 120px; }
+      }
+      .cta-in h2 {
+        font-family: "Songti SC", "STSong", "Noto Serif SC", "SimSun", serif;
+        font-size: clamp(24px, 4vw, 32px); font-weight: 700; margin: 0 0 10px; line-height: 1.35;
+      }
+      .cta-in p { color: var(--ink-2); margin: 0 0 26px; font-size: 15.5px; max-width: 640px; }
+      .cta-actions { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
+      .copy-status { width: 100%; min-height: 1.5em; color: var(--teal-strong); font-size: 13.5px; }
+      .btn-teal { background: var(--teal); color: #fff; }
+      .btn-teal:hover { background: var(--teal-strong); }
+      .btn-outline { border-color: var(--teal); color: var(--teal-strong); background: transparent; }
+      .btn-outline:hover { background: var(--teal-soft); }
+      footer { margin-top: 0; }
+
+      /* ---------- footer ---------- */
+      footer {
+        background: var(--hero-bg); color: var(--hero-ink);
+      }
+      .footer-in { padding: 52px 0 44px; }
+      .footer-in h2 {
+        font-family: "Songti SC", "STSong", "Noto Serif SC", "SimSun", serif; font-size: 26px; margin: 0 0 10px; font-weight: 700;
+      }
+      .footer-in p { color: var(--hero-ink-2); margin: 0 0 24px; font-size: 15px; }
+      .contact-row { display: flex; flex-wrap: wrap; gap: 14px 34px; font-size: 15px; }
+      .contact-row a { color: #5eead4; text-decoration: none; font-weight: 500; }
+      .contact-row a:hover { text-decoration: underline; }
+      .contact-row .lbl { color: var(--hero-ink-2); margin-right: 8px; font-size: 13px; letter-spacing: 0.08em; }
+      .footer-bottom {
+        margin-top: 38px; padding-top: 22px; border-top: 1px solid rgba(238, 246, 244, 0.16);
+        display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between;
+        font-size: 13.5px; color: var(--hero-ink-2);
+      }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="wrap topbar-in">
+        <a class="brand" href="#top" aria-label="返回顶部"><span class="brand-name"><span class="brand-surname">何</span><span class="brand-given">钊新</span></span></a>
+        <nav class="main">
+          <a href="#projects">项目</a>
+          <a href="#about">关于</a>
+          <a href="#skills">技能</a>
+          <a href="#experience">经历</a>
+          <a class="keep contact-cta" href="#contact">联系我</a>
+          <button class="theme-btn" id="themeBtn" type="button" aria-label="切换亮色 / 暗色模式">◐</button>
+        </nav>
+      </div>
+    </header>
+
+    <!-- ============ HERO ============ -->
+    <div class="hero" id="top">
+      <div class="wrap hero-in">
+        <p class="status-badge"><span class="dot"></span>2027 届 · 正在寻找 AI 产品经理 / 数据分析机会</p>
+        <p class="role-line">AI Product Manager · Data Analyst</p>
+        <h1>何钊新</h1>
+        <p class="tagline">数据科学背景，能独立跑完一个 AI 产品的完整闭环。</p>
+        <p class="sub">从需求分析、产品设计，到亲手开发、自建评测基准验证效果、再到上线运行——主导过 Text2SQL 数据分析 Agent 与 RAG 智能助手两个完整项目，独立上线的 AI 求职助手正在真实运行。目前在广东泰迪智能科技参加 AI 应用全栈开发校企合作实训。</p>
+        <div class="hero-cta">
+          <a class="btn btn-light" href="#projects">查看项目 ↓</a>
+          <a class="btn btn-primary" href="assets/resume.pdf" download="何钊新-个人简历.pdf">下载简历 ↓</a>
+          <a class="btn btn-ghost" href="https://github.com/hexiaoxinmff" target="_blank" rel="noopener">GitHub ↗</a>
+        </div>
+        <div class="hero-meta">
+          <span><b>学校</b>　嘉应学院 · 数据科学与大数据技术</span>
+          <span><b>届别</b>　2027 届本科</span>
+          <span><b>方向</b>　AI 产品经理 / 数据分析</span>
+        </div>
+      </div>
+    </div>
+
+    <main class="wrap">
+      <!-- ============ PROJECTS ============ -->
+      <section id="projects">
+        <div class="sec-head">
+          <h2>项目精选</h2><span class="en">Projects</span><span class="rule"></span>
+        </div>
+        <div class="proj-grid">
+
+          <article class="proj featured">
+            <div class="proj-top">
+              <h3>AI 求职助手 job-helper</h3>
+              <span class="who">独立开发 · 已上线</span>
+            </div>
+            <div class="core-metrics">已上线 · <a href="https://job-helper-live.vercel.app/" target="_blank" rel="noopener">job-helper-live.vercel.app ↗</a></div>
+            <figure class="project-shot">
+              <img src="assets/job-helper.jpg" alt="AI 求职助手的简历诊断页面，包含简历上传、目标岗位描述与 AI 增强诊断设置" width="1918" height="991" />
+              <figcaption>简历诊断页 · 上传简历与目标岗位描述后生成改进建议</figcaption>
+            </figure>
+            <div class="case-block">
+              <span class="case-label">背景与问题</span>
+              <p>自己求职时，岗位信息、投递进度和简历材料散落在各处，管理起来费时又容易漏跟进。</p>
+            </div>
+            <div class="case-block">
+              <span class="case-label">我的角色与关键决策</span>
+              <p>独立完成从需求、原型到开发上线的全过程，并决定真正把它部署上线、对外可访问，而不是停在本地演示——上线后的真实使用反馈才是检验标准。</p>
+            </div>
+            <div class="case-block">
+              <span class="case-label">方案要点</span>
+              <p>Next.js + React 全栈开发，Vercel 部署，是我唯一完整跑通「需求 → 产品 → 上线」生命周期的项目。</p>
+            </div>
+            <div class="outcome">
+              <span class="case-label">成果</span>
+              <div class="stats">
+                <div class="stat"><span class="num"><span class="live-dot"></span>在线运行</span><span class="lbl">job-helper-live.vercel.app</span></div>
+              </div>
+            </div>
+            <div class="tags" style="margin-top: 18px;">
+              <span class="tag">Next.js</span><span class="tag">React</span><span class="tag">全栈开发</span><span class="tag">Vercel 部署</span>
+            </div>
+            <div class="proj-links">
+              <a href="https://job-helper-live.vercel.app/" target="_blank" rel="noopener">在线访问 ↗</a>
+              <a href="https://github.com/hexiaoxinmff/job-helper" target="_blank" rel="noopener">GitHub 仓库 ↗</a>
+            </div>
+          </article>
+
+          <article class="proj">
+            <div class="proj-top">
+              <h3>Text2SQL 电商智能数据分析 Agent</h3>
+              <span class="who">项目负责人</span>
+            </div>
+            <div class="core-metrics">自建 ECO-SQL-Bench v1.1（100 题） · Clean Baseline EX 90.0% · 967 passed</div>
+            <div class="case-block">
+              <span class="case-label">背景与问题</span>
+              <p>电商运营想查一个数据，要排队等开发写 SQL，一来一回效率很低；业务人员明明最懂问题，却被挡在数据库门外。</p>
+            </div>
+            <div class="case-block">
+              <span class="case-label">我的角色与关键决策</span>
+              <p>作为项目负责人，我决定用 LangGraph 编排「Schema 组织 → Few-shot 示例 → SQL 生成 → 校验 → 自动修复 → 执行」的完整链路；另一个关键决策是先建评测基准、再迭代优化——没有度量，就不知道改动到底有没有变好。</p>
+            </div>
+            <div class="case-block">
+              <span class="case-label">方案要点</span>
+              <p>安全层做足：只读连接、AST 语法校验、表与列存在性校验、结果量与重试次数上限，生成的 SQL 先过安检再执行。前端用 React + TypeScript 搭建查询工作台，结果以 ECharts 图表呈现。</p>
+            </div>
+            <div class="outcome">
+              <span class="case-label">成果</span>
+              <div class="stats">
+                <div class="stat"><span class="num">90.0%</span><span class="lbl">自建评测基准执行准确率（EX）</span></div>
+                <div class="stat"><span class="num">100 题</span><span class="lbl">ECO-SQL-Bench v1.1 评测集</span></div>
+                <div class="stat"><span class="num">18 个</span><span class="lbl">交付的前后端 API</span></div>
+              </div>
+            </div>
+            <div class="tags" style="margin-top: 18px;">
+              <span class="tag">FastAPI</span><span class="tag">LangGraph</span><span class="tag">React / TypeScript</span><span class="tag">ECharts</span><span class="tag">SQLite</span><span class="tag">评测体系</span>
+            </div>
+          </article>
+
+          <article class="proj">
+            <div class="proj-top">
+              <h3>RAG 智能面试练习助手</h3>
+              <span class="who">项目负责人</span>
+            </div>
+            <div class="core-metrics">真实会话 #72「35 次回答 0 错误」 · 470 tests 零回归</div>
+            <div class="case-block">
+              <span class="case-label">背景与问题</span>
+              <p>面试练习时，通用题库不结合本人简历，问答不对口、复盘没抓手；直接问大模型又容易得到与自己经历对不上的回答。</p>
+            </div>
+            <div class="case-block">
+              <span class="case-label">我的角色与关键决策</span>
+              <p>我定下硬规则：所有回答只能基于本人简历、技能卡与知识库的检索结果生成，并写入「不得虚构候选人经历」的硬约束，资料不足时宁可明确说明，也不编造。</p>
+            </div>
+            <div class="case-block">
+              <span class="case-label">方案要点</span>
+              <p>语音转写 → RAG 检索个人资料 → 大模型流式生成参考回答，用 Python + PySide6 做桌面端，方便练习后回看与复盘。</p>
+            </div>
+            <div class="outcome">
+              <span class="case-label">成果</span>
+              <div class="stats">
+                <div class="stat"><span class="num">470 项</span><span class="lbl">自动化测试 · 零回归</span></div>
+                <div class="stat"><span class="num">35 次 / 0 错误</span><span class="lbl">真实会话验证回答</span></div>
+              </div>
+            </div>
+            <div class="tags" style="margin-top: 18px;">
+              <span class="tag">Python</span><span class="tag">PySide6</span><span class="tag">RAG</span><span class="tag">流式 ASR</span><span class="tag">ChromaDB</span>
+            </div>
+          </article>
+
+          <article class="proj" style="grid-column: 1 / -1;">
+            <div class="proj-top">
+              <h3>供应商重要性评估模型</h3>
+              <span class="who">数据分析</span>
+            </div>
+            <div class="core-metrics">402 家企业 · 熵权法</div>
+            <div class="case-block">
+              <span class="case-label">背景与问题</span>
+              <p>一家建材企业要从 402 家供应商中选出核心合作对象，过去主要靠经验判断，缺少客观、可复核的依据。</p>
+            </div>
+            <div class="case-block">
+              <span class="case-label">我的角色与关键决策</span>
+              <p>我选择用熵权法做客观赋权，让指标权重由数据本身决定，避免主观打分带来的偏差。</p>
+            </div>
+            <div class="case-block">
+              <span class="case-label">方案要点</span>
+              <p>清洗近五年周度订货 / 供货时序数据，构建六项指标模型，用 Pandas / NumPy 完成建模与排序。</p>
+            </div>
+            <div class="outcome">
+              <span class="case-label">成果</span>
+              <div class="stats">
+                <div class="stat"><span class="num">402 家</span><span class="lbl">供应商样本 · 近五年时序数据</span></div>
+                <div class="stat"><span class="num">6 项指标</span><span class="lbl">熵权法综合建模</span></div>
+                <div class="stat"><span class="num">Top 50</span><span class="lbl">核心供应商筛选结果</span></div>
+              </div>
+              <p style="margin: 0 0 10px;">并据此提出「战略合作 / 优先采购 / 备用」三级供应商管理体系建议。</p>
+            </div>
+            <div class="tags" style="margin-top: 18px;">
+              <span class="tag">Pandas / NumPy</span><span class="tag">熵权法</span><span class="tag">数据清洗</span><span class="tag">统计分析</span>
+            </div>
+          </article>
+
+        </div>
+        <aside class="github-card" aria-labelledby="githubReposTitle">
+          <div>
+            <h3 id="githubReposTitle">GitHub · 公开仓库</h3>
+            <a class="github-profile" href="https://github.com/hexiaoxinmff" target="_blank" rel="noopener">github.com/hexiaoxinmff ↗</a>
+          </div>
+          <div class="repo-list">
+            <a class="repo-link" href="https://github.com/hexiaoxinmff/ai-skill-path-planner" target="_blank" rel="noopener"><span class="repo-name">ai-skill-path-planner</span><span class="repo-license">MIT License ↗</span></a>
+            <a class="repo-link" href="https://github.com/hexiaoxinmff/ecommerce-agent" target="_blank" rel="noopener"><span class="repo-name">ecommerce-agent</span><span class="repo-license">MIT License ↗</span></a>
+            <a class="repo-link" href="https://github.com/hexiaoxinmff/job-helper" target="_blank" rel="noopener"><span class="repo-name">job-helper</span><span class="repo-license">MIT License ↗</span></a>
+            <a class="repo-link" href="https://github.com/hexiaoxinmff/job-monitor-agent" target="_blank" rel="noopener"><span class="repo-name">job-monitor-agent</span><span class="repo-license">MIT License ↗</span></a>
+          </div>
+        </aside>
+      </section>
+
+      <!-- ============ ABOUT ============ -->
+      <section id="about">
+        <div class="sec-head">
+          <h2>关于我</h2><span class="en">About</span><span class="rule"></span>
+        </div>
+        <div class="about-card">
+          <p>我是嘉应学院数据科学与大数据技术专业的 2027 届本科生。比起只停留在某一端，我更喜欢把两件事一起做：<b>既做产品</b>——做需求分析、功能规划、写需求文档；<b>也亲手写代码把产品做出来</b>——从后端服务、Agent 编排到前端页面，再用评测数据验证它到底好不好用。算是「产品 + 工程」双修型选手。</p>
+          <p>目前我在广东泰迪智能科技参加 AI 应用全栈开发实训，日常就是把大模型 / 智能体场景拆成能落地的功能方案。课余时间，我在小红书以「AI 实战派」的身份记录自己的 AI 项目实录和工具实测——做完一个项目，就把过程、踩坑和结论都写出来。</p>
+        </div>
+      </section>
+
+      <!-- ============ SKILLS ============ -->
+      <section id="skills">
+        <div class="sec-head">
+          <h2>技能</h2><span class="en">Skills</span><span class="rule"></span>
+        </div>
+        <div class="skill-grid">
+          <div class="skill-col">
+            <h3>产品</h3>
+            <ul>
+              <li>需求分析</li>
+              <li>功能规划</li>
+              <li>Prompt 工程</li>
+              <li>产品文档撰写</li>
+            </ul>
+          </div>
+          <div class="skill-col">
+            <h3>数据</h3>
+            <ul>
+              <li>Python</li>
+              <li>Pandas / NumPy</li>
+              <li>MySQL</li>
+              <li>统计分析</li>
+              <li>ECharts 可视化</li>
+            </ul>
+          </div>
+          <div class="skill-col">
+            <h3>工程</h3>
+            <ul>
+              <li>RAG 应用开发</li>
+              <li>LangGraph</li>
+              <li>Dify</li>
+              <li>FastAPI</li>
+              <li>React</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ EXPERIENCE ============ -->
+      <section id="experience">
+        <div class="sec-head">
+          <h2>经历</h2><span class="en">Experience</span><span class="rule"></span>
+        </div>
+        <div class="timeline">
+          <div class="tl-item">
+            <span class="tl-when">2026.08 — 至今</span>
+            <h3>广东泰迪智能科技 · AI 应用全栈开发（校企合作实训）</h3>
+            <p>负责需求分析与 AI 产品功能规划，参与大模型 / 智能体场景的产品设计，将业务需求拆解为可落地的功能方案与需求文档。</p>
+            <ul class="tl-bullets">
+              <li>担任统计建模项目组负责人，带领 4 人团队，为 AI 备赛 Copilot 工具网站做参赛全流程实测。</li>
+            </ul>
+          </div>
+          <div class="tl-item">
+            <span class="tl-when">2023.09 — 2027.07</span>
+            <h3>嘉应学院 · 数据科学与大数据技术 本科</h3>
+            <p>主修课程：数据结构与算法、Python 数据分析、机器学习、数据库系统、大数据技术原理。</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- ============ CONTACT CTA ============ -->
+    <div class="cta-band" id="contact">
+      <div class="wrap cta-in">
+        <div class="cta-layout">
+          <div>
+            <h2>正在寻找 2027 届 AI 产品经理 / 数据分析机会</h2>
+            <p>如果你在招这个方向的实习生或校招生，或者想聊聊我做的这几个项目，欢迎直接邮件联系——简历和项目细节都可以发你。</p>
+            <div class="cta-actions">
+              <a class="btn btn-teal" href="mailto:hezhaoxin2026@163.com">邮件联系 ✉</a>
+              <button class="btn btn-outline" id="copyEmailBtn" type="button">复制邮箱</button>
+              <a class="btn btn-outline" href="https://github.com/hexiaoxinmff" target="_blank" rel="noopener">GitHub ↗</a>
+              <span class="copy-status" id="copyEmailStatus" role="status" aria-live="polite"></span>
+            </div>
+          </div>
+          <div class="wechat-card">
+            <img src="assets/wechat.jpg" alt="何钊新的微信二维码" width="620" height="620" />
+            <div><strong>微信扫码加我</strong><span>备注来意，方便及时回复</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ FOOTER / CONTACT ============ -->
+    <footer>
+      <div class="wrap footer-in">
+        <h2>联系我</h2>
+        <p>正在寻找 AI 产品经理 / 数据分析方向的实习与校招机会，欢迎邮件或 GitHub 联系。</p>
+        <div class="contact-row">
+          <span><span class="lbl">EMAIL</span><a href="mailto:hezhaoxin2026@163.com">hezhaoxin2026@163.com</a></span>
+          <span><span class="lbl">GITHUB</span><a href="https://github.com/hexiaoxinmff" target="_blank" rel="noopener">github.com/hexiaoxinmff</a></span>
+        </div>
+        <div class="footer-bottom">
+          <span>© 2026 何钊新</span>
+          <span>C1 驾驶证 · 日语 N4 · 粤语 / 普通话</span>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      (function () {
+        var root = document.documentElement;
+        var btn = document.getElementById('themeBtn');
+        function currentTheme() {
+          var t = root.getAttribute('data-theme');
+          if (t) return t;
+          return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        btn.addEventListener('click', function () {
+          root.setAttribute('data-theme', currentTheme() === 'dark' ? 'light' : 'dark');
+        });
+        var copyBtn = document.getElementById('copyEmailBtn');
+        var copyStatus = document.getElementById('copyEmailStatus');
+        var email = 'hezhaoxin2026@163.com';
+
+        function showCopySuccess() {
+          copyBtn.textContent = '已复制';
+          copyStatus.textContent = '邮箱已复制：' + email;
+          window.setTimeout(function () {
+            copyBtn.textContent = '复制邮箱';
+            copyStatus.textContent = '';
+          }, 2400);
+        }
+
+        function fallbackCopy() {
+          var input = document.createElement('textarea');
+          input.value = email;
+          input.setAttribute('readonly', '');
+          input.style.position = 'fixed';
+          input.style.opacity = '0';
+          document.body.appendChild(input);
+          input.select();
+          var copied = document.execCommand('copy');
+          document.body.removeChild(input);
+          if (copied) showCopySuccess();
+          else copyStatus.textContent = '复制失败，请长按邮箱地址复制。';
+        }
+
+        copyBtn.addEventListener('click', function () {
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(email).then(showCopySuccess, fallbackCopy);
+          } else {
+            fallbackCopy();
+          }
+        });
+      })();
+    </script>
+  </body>
+</html>
