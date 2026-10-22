@@ -343,7 +343,6 @@
           <ul>
             <li><a href="#about" data-nav="about"><span class="nav-line"></span>关于</a></li>
             <li><a href="#projects" data-nav="projects"><span class="nav-line"></span>项目</a></li>
-            <li><a href="#stats" data-nav="stats"><span class="nav-line"></span>统计建模</a></li>
             <li><a href="#skills" data-nav="skills"><span class="nav-line"></span>技能</a></li>
             <li><a href="#experience" data-nav="experience"><span class="nav-line"></span>经历</a></li>
             <li><a href="#contact" data-nav="contact"><span class="nav-line"></span>联系</a></li>
@@ -557,45 +556,6 @@
           </aside>
         </section>
 
-                <!-- ============ STATS PROJECT ============ -->
-        <section id="stats">
-          <div class="sec-head">
-            <h2>统计建模项目</h2><span class="en">Modeling Project</span><span class="rule"></span>
-          </div>
-          <div class="about-text">
-            <p>这是我实习期间负责的团队项目：担任统计建模项目组负责人，带领 4 人团队，为 AI 备赛工具「AI 备赛 Copilot」做参赛全流程实测——把一届统计建模竞赛从选题、数据、建模到论文完整跑通一遍，再把实测结论反哺回工具的产品设计。</p>
-          </div>
-          <div class="dim-group">
-            <div class="exp-row dim-item">
-              <span class="exp-when">真题资料库</span>
-              <div>
-                <h3>2022–2025 四届赛题结构化入库</h3>
-                <p>整理四届统计建模大赛赛题，建成结构化赛题库，作为备赛工具选题模块的数据底座。</p>
-              </div>
-            </div>
-            <div class="exp-row dim-item">
-              <span class="exp-when">数据集</span>
-              <div>
-                <h3>获奖作品数据集整理与脱敏</h3>
-                <p>整理往届获奖作品数据集（约 50 MB），完成脱敏终审——敏感信息逐条核验、无残留后才入库使用。</p>
-              </div>
-            </div>
-            <div class="exp-row dim-item">
-              <span class="exp-when">打分链路</span>
-              <div>
-                <h3>年报 RAG / LLM 打分链路实测</h3>
-                <p>以「企业 AI 发展水平与企业创新产出」为实测课题，跑通年报采集 → 清洗 → RAG / LLM 打分全链路，覆盖 140 个公司-年份样本；实测中发现 LLM 打分存在锚定效应，据此把评分指标改为档位化设计。</p>
-              </div>
-            </div>
-            <div class="exp-row dim-item">
-              <span class="exp-when">产品沉淀</span>
-              <div>
-                <h3>实测结论反哺产品设计</h3>
-                <p>把全流程实测的结论沉淀为 AI 备赛 Copilot 的产品目标与需求文档，北极星指标定为「闭环跑通率」。</p>
-              </div>
-            </div>
-          </div>
-        </section>
 
         <!-- ============ SKILLS ============ -->
         <section id="skills">
@@ -741,7 +701,7 @@
             }
           });
         }, { rootMargin: '-30% 0px -60% 0px' });
-        ['about', 'projects', 'stats', 'skills', 'experience', 'contact'].forEach(function (id) {
+        ['about', 'projects', 'skills', 'experience', 'contact'].forEach(function (id) {
           var el = document.getElementById(id);
           if (el) spy.observe(el);
         });
