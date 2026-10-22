@@ -281,13 +281,6 @@
       .cta-card p { color: var(--ink-2); margin: 0 0 24px; font-size: 15.5px; }
       .cta-actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
       .copy-status { font-size: 13.5px; color: var(--teal-strong); }
-      .wechat-card {
-        display: flex; align-items: center; gap: 18px;
-        margin-top: 26px; padding-top: 22px; border-top: 1px solid var(--line);
-      }
-      .wechat-card img { width: 118px; height: 118px; object-fit: contain; display: block; border-radius: 12px; border: 1px solid var(--line); background: #fff; }
-      .wechat-card strong { display: block; font-size: 15.5px; }
-      .wechat-card span { font-size: 13.5px; color: var(--ink-3); }
       .contact-lines { margin-top: 24px; display: flex; flex-wrap: wrap; gap: 8px 34px; font-size: 14.5px; }
       .contact-lines .lbl {
         font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
@@ -320,7 +313,6 @@
         .exp-row { grid-template-columns: 1fr; gap: 2px; padding: 18px 14px; margin: 0 -14px; }
         .exp-when { padding-top: 0; }
         .cta-card { padding: 24px 20px 22px; }
-        .wechat-card img { width: 104px; height: 104px; }
       }
       @media (prefers-reduced-motion: reduce) {
         html { scroll-behavior: auto; }
@@ -628,9 +620,6 @@
               <a class="btn btn-outline" href="https://github.com/hexiaoxinmff" target="_blank" rel="noopener">GitHub ↗</a>
               <span class="copy-status" id="copyEmailStatus" role="status" aria-live="polite"></span>
             </div>
-            <div class="wechat-card">
-              <img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-b64src="assets/wechat.jpg" alt="何钊新的微信二维码" width="620" height="620" />
-              <div><strong>微信扫码加我</strong><span>备注来意，方便及时回复</span></div>
             </div>
             <div class="contact-lines">
               <span><span class="lbl">EMAIL</span><a href="mailto:hezhaoxin2026@163.com">hezhaoxin2026@163.com</a></span>
@@ -719,13 +708,6 @@
           });
         }
       })();
-    </script>
-    <script>
-      document.querySelectorAll('img[data-b64src]').forEach(function (img) {
-        fetch(img.getAttribute('data-b64src')).then(function (r) { return r.text(); }).then(function (t) {
-          img.src = 'data:image/jpeg;base64,' + t.replace(/\s+/g, '');
-        }).catch(function () {});
-      });
     </script>
   </body>
 </html>
